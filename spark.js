@@ -311,7 +311,7 @@ while (executorRangeWidth > 0) {
           (executorIdRangeMin + '') :
           (executorIdRangeMin + "-" + executorIdRangeMax);
     var value = getGraphiteRangesStr(executorIdRangeMin, executorIdRangeMax);
-    executorRangeTemplateVar.options.push({ text: text, value: value });
+    //executorRangeTemplateVar.options.push({ text: text, value: value });
   }
   executorRangeWidth /= 10;
 }
@@ -335,7 +335,7 @@ function summarize(target, interval, fn) {
 function nonNegativeDerivative(target) { return "nonNegativeDerivative(" + target + ")"; }
 function perSecond(target) { return "perSecond(" + target + ")"; }
 function sumSeries(target) { return "sumSeries(" + target + ")"; }
-function prefix(target, range) { return "$prefix.$driver.$executorRange" + ".executor." + target; }
+function prefix(target, range) { return "$prefix.$driver.$executor" + ".executor." + target; }
 
 
 // Some panel-JSON-construction helpers.
@@ -388,14 +388,14 @@ function executorJvmPanel(id, opts) {
         [
           aliasSub(
                 aliasSub(
-                      "$prefix." + id + ".jvm.pools.*.usage",
+                      "$prefix." + id + "driver.jvm.pools.*.usage",
                       "^.*\\.([^.]*)\\.usage.*"
                 ),
                 "(PS-)?(-Space)?-?",
                 ""
           ),
           aliasSub(
-                "$prefix." + id + ".jvm.{non-heap,heap}.usage",
+                "$prefix." + id + "driver.jvm.{non-heap,heap}.usage",
                 ".*\\.((non-)?heap)\\..*"
           )
         ],
@@ -468,8 +468,8 @@ var dashboard = {
     enable: true,
     list: [
       prefixTemplateVar,
-      executorRangeTemplateVar,
-      driverTemplateVar
+      driverTemplateVar,
+      executorRangeTemplateVar
     ]
   }
 };
@@ -552,10 +552,10 @@ var driver_row = {
   collapse: false,
   panels: [
     panel(
-          "Driver scavenge GC",
+          "Driver Copy GC",
           [
-            alias("$prefix.$driver.jvm.PS-Scavenge.count", "GC count"),
-            alias("$prefix.$driver.jvm.PS-Scavenge.time", "GC time")
+            alias("$prefix.$driver.driver.jvm.Copy.count", "GC count"),
+            alias("$prefix.$driver.driver.jvm.Copy.time", "GC time")
           ],
           {
             nullPointMode: 'connected',
@@ -570,7 +570,7 @@ var driver_row = {
     executorJvmPanel("$driver"),
     panel(
           "Driver GC Time/s",
-          [ alias(perSecond(summarize("$prefix.$driver.jvm.PS-Scavenge.time")), 'GC time') ],
+          [ alias(perSecond(summarize("$prefix.$driver.driver.jvm.Copy.time")), 'GC time') ],
           {
             nullPointMode: 'connected',
             pointradius: 1
@@ -582,14 +582,14 @@ var driver_row = {
 
 // A "row" with HDFS I/O stats.
 var hdfs_row =     {
-  title: "HDFS I/O",
+  title: "File I/O",
   height: "300px",
   editable: true,
   collapse: false,
   panels: [
     multiExecutorPanel(
-          "HDFS reads/s, 10s avgs",
-          "filesystem.hdfs.read_ops",
+          "File reads/s, 10s avgs",
+          "filesystem.file.read_ops",
           {
             span: 6,
             pointradius: 1,
@@ -610,8 +610,8 @@ var hdfs_row =     {
           [ perSecond ]
     ),
     multiExecutorPanel(
-          "HDFS reads/executor",
-          "filesystem.hdfs.read_ops",
+          "File reads/executor",
+          "filesystem.file.read_ops",
           {
             span: 6,
             seriesOverrides: [
@@ -629,8 +629,8 @@ var hdfs_row =     {
           percentilesAndTotals ? [ 25, 50, 75, 'total' ] : []
     ),
     multiExecutorPanel(
-          "HDFS bytes read/s/executor, 10s avgs",
-          "filesystem.hdfs.read_bytes",
+          "File bytes read/s/executor, 10s avgs",
+          "filesystem.file.read_bytes",
           {
             y_formats: [
               "bytes",
@@ -653,8 +653,8 @@ var hdfs_row =     {
           [ perSecond ]
     ),
     multiExecutorPanel(
-          "HDFS bytes read",
-          "filesystem.hdfs.read_bytes",
+          "File bytes read",
+          "filesystem.file.read_bytes",
           {
             y_formats: [
               "bytes",
