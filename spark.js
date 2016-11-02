@@ -229,30 +229,28 @@ var driverTemplateVar = {
   name: "driver",
   query: "",
   options: [
-    // This is the value Spark typically sends to Graphite.
-    { text: "<driver>", value: "<driver>" },
     // If Spark sends its metrics to Graphite via StatsD, the driver identifier loses its angle-
     // brackets for some reason.
-    { text: "driver", value: "driver" },
+    { text: "driver", value: "app-*" },
   ],
-  current: { text: "<driver>", value: "<driver>" }
+  current: { text: "driver", value: "app-*" }
 };
 
 var executorRangeTemplateVar = {
   type: "custom",
-  name: "executorRange",
+  name: "executor",
   query: "",
   options: [
     {
-      text: "*",
-      value: "*"
+      text: "guid",
+      value: "[a-z0-9]*-[a-z0-9]*"
     }
   ],
   includeAll: true,
   allFormat: "glob",
   current: {
-    text: "*",
-    value: "*"
+    text: "guid",
+    value: "[a-z0-9]*-[a-z0-9]*"
   }
 };
 
@@ -269,7 +267,7 @@ var executorRangeTemplateVar = {
  *       "executors" query param
  *     - one option per range in the "executors" query param
  */
-var executorRanges = getIntRangeParams(ARGS.executors);
+var executorRanges = null; //getIntRangeParams(ARGS.executors);
 if (executorRanges.length) {
 
   // Add an option that is the union of all ranges passed in the
@@ -337,7 +335,7 @@ function summarize(target, interval, fn) {
 function nonNegativeDerivative(target) { return "nonNegativeDerivative(" + target + ")"; }
 function perSecond(target) { return "perSecond(" + target + ")"; }
 function sumSeries(target) { return "sumSeries(" + target + ")"; }
-function prefix(target, range) { return "$prefix." + (range || '$executorRange') + ".executor." + target; }
+function prefix(target, range) { return "$prefix.$driver.$executorRange" + ".executor." + target; }
 
 
 // Some panel-JSON-construction helpers.
