@@ -267,7 +267,7 @@ var executorRangeTemplateVar = {
  *       "executors" query param
  *     - one option per range in the "executors" query param
  */
-var executorRanges getIntRangeParams(ARGS.executors);
+var executorRanges = getIntRangeParams(ARGS.executors);
 if (executorRanges.length) {
 
   // Add an option that is the union of all ranges passed in the
