@@ -231,9 +231,9 @@ var driverTemplateVar = {
   options: [
     // If Spark sends its metrics to Graphite via StatsD, the driver identifier loses its angle-
     // brackets for some reason.
-    { text: "driver", value: "app-*" },
+    { text: "app-*", value: "app-*" },
   ],
-  current: { text: "driver", value: "app-*" }
+  current: { text: "app-*", value: "app-*" }
 };
 
 var executorRangeTemplateVar = {
@@ -388,14 +388,14 @@ function executorJvmPanel(id, opts) {
         [
           aliasSub(
                 aliasSub(
-                      "$prefix." + id + "driver.jvm.pools.*.usage",
+                      "$prefix." + id + ".driver.jvm.pools.*.usage",
                       "^.*\\.([^.]*)\\.usage.*"
                 ),
                 "(PS-)?(-Space)?-?",
                 ""
           ),
           aliasSub(
-                "$prefix." + id + "driver.jvm.{non-heap,heap}.usage",
+                "$prefix." + id + ".driver.jvm.{non-heap,heap}.usage",
                 ".*\\.((non-)?heap)\\..*"
           )
         ],
