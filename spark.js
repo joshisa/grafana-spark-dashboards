@@ -585,7 +585,7 @@ var files_row =     {
   title: "File I/O",
   height: "300px",
   editable: true,
-  collapse: false,
+  collapse: true,
   panels: [
     multiExecutorPanel(
           "File reads/s, 10s avgs",
