@@ -580,8 +580,8 @@ var driver_row = {
 };
 
 
-// A "row" with HDFS I/O stats.
-var hdfs_row =     {
+// A "row" with File I/O stats.
+var files_row =     {
   title: "File I/O",
   height: "300px",
   editable: true,
@@ -768,10 +768,9 @@ var carbon_row = {
 
 // The dashboard, with its rows.
 dashboard.rows = [
-  executor_row,
   threadpool_row,
   driver_row,
-  hdfs_row,
+  files_row,
   carbon_row
 ];
 
