@@ -384,7 +384,7 @@ function executorJvmPanel(id, opts) {
   opts = opts || {};
   opts.nullPointMode = 'connected';
   return panel(
-        id + ": GC tiers / generations",
+        "All Drivers: GC tiers / generations",
         [
           aliasSub(
                 aliasSub(
@@ -589,7 +589,7 @@ var hdfs_row =     {
   panels: [
     multiExecutorPanel(
           "File reads/s, 10s avgs",
-          "filesystem.file.read_ops",
+          "filesystem.file.read_bytes",
           {
             span: 6,
             pointradius: 1,
@@ -611,7 +611,7 @@ var hdfs_row =     {
     ),
     multiExecutorPanel(
           "File reads/executor",
-          "filesystem.file.read_ops",
+          "filesystem.file.read_bytes",
           {
             span: 6,
             seriesOverrides: [
@@ -629,14 +629,24 @@ var hdfs_row =     {
           percentilesAndTotals ? [ 25, 50, 75, 'total' ] : []
     ),
     multiExecutorPanel(
-          "File bytes read/s/executor, 10s avgs",
+          "File bytes read",
           "filesystem.file.read_bytes",
           {
             y_formats: [
               "bytes",
               "bytes"
             ],
+            span: 6
+          },
+          percentilesAndTotals ? [ 5, 50, 95, 'total' ] : []
+    ),
+    multiExecutorPanel(
+          "File writes/s, 10s avgs",
+          "filesystem.file.write_bytes",
+          {
             span: 6,
+            pointradius: 1,
+            steppedLine: true,
             seriesOverrides: [
               {
                 alias: "/total/",
@@ -653,8 +663,27 @@ var hdfs_row =     {
           [ perSecond ]
     ),
     multiExecutorPanel(
-          "File bytes read",
-          "filesystem.file.read_bytes",
+          "File writes/executor",
+          "filesystem.file.write_bytes",
+          {
+            span: 6,
+            seriesOverrides: [
+              {
+                alias: "/total/",
+                linewidth: 4,
+                yaxis: 2
+              },
+              {
+                alias: "/%/",
+                linewidth: 3
+              }
+            ]
+          },
+          percentilesAndTotals ? [ 25, 50, 75, 'total' ] : []
+    ),
+    multiExecutorPanel(
+          "File bytes written",
+          "filesystem.file.write_bytes",
           {
             y_formats: [
               "bytes",
@@ -663,7 +692,7 @@ var hdfs_row =     {
             span: 6
           },
           percentilesAndTotals ? [ 5, 50, 95, 'total' ] : []
-    ),
+    )
   ],
 }
 
@@ -718,8 +747,8 @@ var carbon_row = {
           {
             legend: legend(true),
             y_formats: [
-              "bytes",
-              "bytes"
+              "data bytes",
+              "data bytes"
             ],
             seriesOverrides: [
               {
