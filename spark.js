@@ -492,12 +492,12 @@ var executor_row = {
 if (executorRanges.length) {
   executorRanges.forEach(function(executorRange) {
     for (var executorId = executorRange.from; executorId <= executorRange.to; ++executorId) {
-      executor_row.panels.push(executorJvmPanel(executorId, { span: 3, legend: legend(executorLegends) }));
+      //executor_row.panels.push(executorJvmPanel(executorId, { span: 3, legend: legend(executorLegends) }));
     }
   });
 } else {
   for (var executorId = 1; executorId <= maxExecutorId; ++executorId) {
-    executor_row.panels.push(executorJvmPanel(executorId, { span: 3 }));
+    //executor_row.panels.push(executorJvmPanel(executorId, { span: 3 }));
   }
 }
 
